@@ -1,0 +1,31 @@
+@startuml
+entity User {
+  * user_id : int
+  --
+  username : varchar
+  email : varchar
+  password_hash : varchar
+}
+
+entity Scenario {
+  * scenario_id : int
+  --
+  scenario_name : varchar
+  description : varchar
+  created_at : datetime
+  updated_at : datetime
+  user_id : int
+}
+
+entity ScenarioStep {
+  * step_id : int
+  --
+  scenario_id : int
+  step_order : int
+  action : varchar
+  parameters : varchar
+}
+
+User ||--o{ Scenario : "creates"
+Scenario ||--o{ ScenarioStep : "contains step"
+@enduml
