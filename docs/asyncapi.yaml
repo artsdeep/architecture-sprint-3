@@ -1,0 +1,148 @@
+asyncapi: '2.0.0'
+info:
+  title: Управление устройствами и Телеметрия
+  version: '1.0.0'
+  description: |
+    API для взаимодействия между сервисами "Управление устройствами" и "Телеметрия" в формате AsyncAPI.
+  contact:
+    name: Команда разработчиков
+    url: 'https://example.com'
+    email: 'support@example.com'
+servers:
+  production:
+    url: kafka.example.com:9092
+    protocol: kafka
+channels:
+  device/registration:
+    description: Канал для сообщений о регистрации устройства
+    publish:
+      summary: Регистрация устройства
+      operationId: registerDevice
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            device_id:
+              type: string
+              description: Уникальный идентификатор устройства
+            device_type:
+              type: string
+              description: Тип устройства
+            owner_id:
+              type: string
+              description: Идентификатор владельца устройства
+    subscribe:
+      summary: Получение сообщений о регистрации устройства
+      operationId: receiveDeviceRegistration
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            status:
+              type: string
+              description: Статус регистрации
+            device_id:
+              type: string
+              description: Уникальный идентификатор устройства
+            message:
+              type: string
+              description: Описание результата регистрации
+  telemetry/data:
+    description: Канал для передачи телеметрических данных
+    publish:
+      summary: Отправка телеметрических данных
+      operationId: sendTelemetryData
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            device_id:
+              type: string
+              description: Уникальный идентификатор устройства
+            timestamp:
+              type: string
+              format: date-time
+              description: Временная метка данных
+            data:
+              type: object
+              description: Телеметрические данные
+              properties:
+                temperature:
+                  type: number
+                  description: Температура устройства
+                humidity:
+                  type: number
+                  description: Влажность устройства
+    subscribe:
+      summary: Получение телеметрических данных
+      operationId: receiveTelemetryData
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            device_id:
+              type: string
+              description: Уникальный идентификатор устройства
+            timestamp:
+              type: string
+              format: date-time
+              description: Временная метка данных
+            data:
+              type: object
+              description: Телеметрические данные
+              properties:
+                temperature:
+                  type: number
+                  description: Температура устройства
+                humidity:
+                  type: number
+                  description: Влажность устройства
+components:
+  messages:
+    DeviceRegistered:
+      summary: Сообщение о регистрации устройства
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          device_id:
+            type: string
+            description: Уникальный идентификатор устройства
+          device_type:
+            type: string
+            description: Тип устройства
+          owner_id:
+            type: string
+            description: Идентификатор владельца устройства
+          status:
+            type: string
+            description: Статус регистрации
+          message:
+            type: string
+            description: Описание сообщения
+    TelemetryData:
+      summary: Телеметрические данные устройства
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          device_id:
+            type: string
+            description: Уникальный идентификатор устройства
+          timestamp:
+            type: string
+            format: date-time
+            description: Временная метка данных
+          data:
+            type: object
+            properties:
+              temperature:
+                type: number
+                description: Температура устройства
+              humidity:
+                type: number
+                description: Влажность устройства

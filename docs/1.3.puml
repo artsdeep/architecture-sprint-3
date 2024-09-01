@@ -1,12 +1,4 @@
 @startuml
-entity User {
-  * user_id : int
-  --
-  username : varchar
-  email : varchar
-  password_hash : varchar
-}
-
 entity Device {
   * device_id : int
   --
@@ -31,7 +23,6 @@ entity DeviceConfig {
   config_value : varchar
 }
 
-User ||--o{ Device : "owns"
 DeviceType ||--o{ Device : "is of type"
 Device ||--o{ DeviceConfig : "has configuration"
 @enduml

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:13-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: smart_home
+      POSTGRES_USER: user_postgres
+      POSTGRES_PASSWORD: password_postgres
+    ports:
+      - "5732:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:

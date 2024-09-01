@@ -1,11 +1,4 @@
 @startuml
-entity User {
-  * user_id : int
-  --
-  username : varchar
-  email : varchar
-  password_hash : varchar
-}
 
 entity Scenario {
   * scenario_id : int
@@ -26,6 +19,5 @@ entity ScenarioStep {
   parameters : varchar
 }
 
-User ||--o{ Scenario : "creates"
 Scenario ||--o{ ScenarioStep : "contains step"
 @enduml
