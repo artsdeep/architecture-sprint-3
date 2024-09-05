@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-app-telemetry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-app-telemetry
+  template:
+    metadata:
+      labels:
+        app: java-app-telemetry
+    spec:
+      containers:
+        - name: java-app-telemetry
+          image: ghcr.io/artsdeep/smart-home-telemetry:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATABASE_URL
+              value: "postgres://your_username:your_password@postgres-db:5432/smart_home"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-app-telemetry-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30000
+  selector:
+    app: java-app-telemetry
