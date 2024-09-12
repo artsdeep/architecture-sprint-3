@@ -49,6 +49,84 @@ channels:
             message:
               type: string
               description: Описание результата регистрации
+  device/add:
+    description: Канал для добавления нового устройства
+    publish:
+      summary: Добавление устройства
+      operationId: addDevice
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            device_id:
+              type: string
+              description: Уникальный идентификатор устройства
+            device_type:
+              type: string
+              description: Тип устройства
+            owner_id:
+              type: string
+              description: Идентификатор владельца устройства
+            status:
+              type: string
+              description: Статус добавления устройства
+    subscribe:
+      summary: Получение сообщений о добавлении устройства
+      operationId: receiveDeviceAddition
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            status:
+              type: string
+              description: Статус добавления
+            device_id:
+              type: string
+              description: Уникальный идентификатор устройства
+            message:
+              type: string
+              description: Описание сообщения о добавлении устройства
+  device/update:
+    description: Канал для обновления информации об устройстве
+    publish:
+      summary: Изменение устройства
+      operationId: updateDevice
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            device_id:
+              type: string
+              description: Уникальный идентификатор устройства
+            device_type:
+              type: string
+              description: Новый тип устройства
+            owner_id:
+              type: string
+              description: Новый идентификатор владельца устройства
+            status:
+              type: string
+              description: Статус изменения устройства
+    subscribe:
+      summary: Получение сообщений об изменении устройства
+      operationId: receiveDeviceUpdate
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            status:
+              type: string
+              description: Статус изменения
+            device_id:
+              type: string
+              description: Уникальный идентификатор устройства
+            message:
+              type: string
+              description: Описание сообщения об изменении устройства
   telemetry/data:
     description: Канал для передачи телеметрических данных
     publish:
@@ -121,6 +199,48 @@ components:
           status:
             type: string
             description: Статус регистрации
+          message:
+            type: string
+            description: Описание сообщения
+    DeviceAdded:
+      summary: Сообщение о добавлении устройства
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          device_id:
+            type: string
+            description: Уникальный идентификатор устройства
+          device_type:
+            type: string
+            description: Тип устройства
+          owner_id:
+            type: string
+            description: Идентификатор владельца устройства
+          status:
+            type: string
+            description: Статус добавления
+          message:
+            type: string
+            description: Описание сообщения
+    DeviceUpdated:
+      summary: Сообщение об изменении устройства
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          device_id:
+            type: string
+            description: Уникальный идентификатор устройства
+          new_device_type:
+            type: string
+            description: Новый тип устройства
+          new_owner_id:
+            type: string
+            description: Новый идентификатор владельца устройства
+          status:
+            type: string
+            description: Статус изменения
           message:
             type: string
             description: Описание сообщения

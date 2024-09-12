@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: java-app-monolith
-          image: ghcr.io/artsdeep/smart-home-monolith:latest
+          image: artsdeep/smart-home-monolith:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:

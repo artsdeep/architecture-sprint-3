@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: java-app-telemetry
-          image: ghcr.io/artsdeep/smart-home-telemetry:latest
+          image: artsdeep/smart-home-telemetry:latest
           ports:
             - containerPort: 8080
           env:
