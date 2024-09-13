@@ -1,0 +1,22 @@
+@startuml
+title Диаграмма уровня компонентов Сценарии для устройств
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+
+Container_Boundary(scriptThingContainer, "Сценарии для устройств") {
+  Component(scriptThingConstructorComponent, "Script Constructor Thing", $descr="Конструктор сценариев")
+  Component(scriptThingExeComponent, "Script Exe Thing", $descr="Исполняет сценариев")
+  Component(dbAccessScriptComponent, "DB Access", $descr="Реализация взаимодействия с БД")
+}
+
+Rel(scriptThingConstructorComponent, dbAccessScriptComponent, "Обращение к данным")
+Rel(scriptThingExeComponent, dbAccessScriptComponent, "Обращение к данным")
+
+
+
+@enduml
+
+

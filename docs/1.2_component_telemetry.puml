@@ -1,0 +1,18 @@
+@startuml
+title Диаграмма уровня компонентов Телемметрия
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(telemetryContainer, "Телемметрия") {
+  Component(telemetryComponent, "Telemetry Thing", $descr="Телеметрия")
+  Component(dbAccessTelemetryComponent, "DB Access", $descr="Реализация взаимодействия с БД")
+}
+
+
+Rel(telemetryComponent, dbAccessTelemetryComponent, "Обращение к данным")
+
+@enduml
+
+

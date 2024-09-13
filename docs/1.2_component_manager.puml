@@ -1,0 +1,27 @@
+@startuml
+title Диаграмма уровня компанетов Управление устройствами
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+
+
+
+
+Container_Boundary(managerThingContainer, "Управление устройствами") {
+  Component(managerThingComponent, "Manager Thing", $descr="Управление устройстами")
+  Component(managerStateThingComponent, "State Thing", $descr="Состояния устройств")
+  Component(managerCommandThingComponent, "Command Thing", $descr="Команды для устройств")
+  Component(dbAccessThingComponent, "DB Access", $descr="Реализация взаимодействия с БД")
+}
+
+
+
+Rel(managerThingComponent, managerStateThingComponent, "Работа с сотоянием")
+Rel(managerThingComponent, managerCommandThingComponent, "Работа с командами")
+Rel(managerThingComponent, dbAccessThingComponent, "Обращение к данным")
+
+@enduml
+
+
