@@ -1,5 +1,0 @@
-kubectl apply -f postgres-deployment.yaml
-kubectl apply -f kafka-deployment.yaml
-kubectl apply -f java-app-monolith-deployment.yaml
-kubectl apply -f java-app-telemetry-deployment.yaml
-kubectl apply -f java-app-thing-manager-deployment.yaml

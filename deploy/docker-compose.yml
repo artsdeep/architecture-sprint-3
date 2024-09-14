@@ -22,7 +22,7 @@ services:
     networks:
       - smart-home-network
   java_app_telemetry:
-    image: artsdeep/smart-home-telemetry:1.0.0
+    image: ghcr.io/artsdeep/smart-home-telemetry:1.0.3
     container_name: java-app-telemetry
     ports:
       - "58080:8080"
@@ -31,7 +31,7 @@ services:
     depends_on:
       - postgres-db
   java_app_manager:
-    image: artsdeep/smart-home-thing-manager:1.0.1
+    image: ghcr.io/artsdeep/smart-home-thing-manager:1.0.3
     container_name: java-app-manager
     ports:
       - "58083:8083"
