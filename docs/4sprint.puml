@@ -1,0 +1,55 @@
+@startuml
+title Диаграмма контейнеров
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person_Ext(user, "Клиент", "Клиент")
+
+Person(seller, "Продавец", "Продавец")
+
+Person_Ext(user_api, "Администратор MES", "Администратор MES")
+
+Person(operator, "Оператор MES", "Оператор MES")
+
+Container(clientApp, "Веб приложение интернет магазина")
+Container(clientAppCRM, "Веб рпиложение CRM")
+Container(clientAppMES, "Веб рпиложение MES")
+
+
+Container(serverAppShop, "API интернет магазина", "серверное приложение springBoot")
+Container(serverAppCRM, "API CRM", "серверное приложение springBoot")
+Container(serverAppFileStorage, "Приложение хранящие файлы 3д", "серверное приложение по протоколу S3")
+Container(serverAppMES, "API MES", "серверное приложение springBoot")
+
+Container(serverAppRebbitMQ, "RebbitMQ", "серверное приложение очереди сообщений")
+
+
+ContainerDb(dbShop, "ShopDatabase", "PostgreSQL", "База данных магазина")
+ContainerDb(dbMES, "MESDatabase", "PostgreSQL", "База данных MES")
+
+
+Rel(user, clientApp, "")
+Rel(clientApp, serverAppShop, "")
+Rel(serverAppShop, serverAppFileStorage, "")
+Rel(serverAppFileStorage, serverAppCRM, "")
+
+
+
+Rel(seller, clientAppCRM, "")
+Rel(clientAppCRM, serverAppCRM, "")
+Rel(serverAppRebbitMQ, serverAppCRM, "")
+Rel(serverAppCRM, serverAppRebbitMQ, "")
+
+Rel(serverAppRebbitMQ, serverAppMES, "")
+Rel(serverAppMES, serverAppRebbitMQ, "")
+
+Rel(operator, clientAppMES, "")
+Rel(clientAppMES, serverAppMES, "")
+Rel(user_api, serverAppMES, "")
+
+Rel(serverAppShop, dbShop, "")
+Rel(serverAppCRM, dbShop, "")
+Rel(serverAppMES, dbMES, "")
+@enduml

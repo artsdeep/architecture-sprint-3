@@ -1,0 +1,111 @@
+@startuml
+title Контекст Системы Умный дом
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "Пользователь", "Пользователь системы")
+
+Container_Boundary(clientApp, "Клиентское приложение Умного дома") {
+  Component(webComponent, "Wep APP Component", $techn="COMPONENT TYPE", $tags="v1", $descr="Component and boundary use different tag name spaces that both v1 tags can use different styles")
+  Component(mobileComponent, "Mobile Component", $techn="COMPONENT TYPE", $tags="v1", $descr="Component and boundary use different tag name spaces that both v1 tags can use different styles")
+}
+
+
+
+Container_Boundary(deviceGatewayThing, "Шлюз Устройств") {
+  Component(deviceGatewayThingComponent, "API Thing", $descr="Реализует взаимодействие с устройстами")
+}
+
+Container_Boundary(userContainer, "Пользовательский сервис") {
+  Component(userSettingsComponent, "User Settings", $descr="Настройки для пользователя")
+  Component(userAuthComponent, "Auth", $descr="Реализация доступов пользователя")
+  Component(dbAccessComponent, "DB Access", $descr="Реализация взаимодействия с БД")
+}
+
+Container_Boundary(managerThingContainer, "Управление устройствами") {
+  Component(managerThingComponent, "Manager Thing", $descr="Управление устройстами")
+  Component(managerStateThingComponent, "State Thing", $descr="Состояния устройств")
+  Component(managerCommandThingComponent, "Command Thing", $descr="Команды для устройств")
+  Component(dbAccessThingComponent, "DB Access", $descr="Реализация взаимодействия с БД")
+}
+
+Container_Boundary(brokerMassage, "Брокер сообщений") {
+  Component(kafkaComponent, "Kafka", $descr="Шина для интеграции микросервисов")
+}
+
+Container_Boundary(scriptThingContainer, "Сценарии для устройств") {
+  Component(scriptThingConstructorComponent, "Script Constructor Thing", $descr="Конструктор сценариев")
+  Component(scriptThingExeComponent, "Script Exe Thing", $descr="Исполняет сценариев")
+  Component(dbAccessScriptComponent, "DB Access", $descr="Реализация взаимодействия с БД")
+}
+
+Container_Boundary(telemetryContainer, "Телемметрия") {
+  Component(telemetryComponent, "Telemetry Thing", $descr="Телеметрия")
+  Component(dbAccessTelemetryComponent, "DB Access", $descr="Реализация взаимодействия с БД")
+}
+
+Container_Boundary(APIGateway, "API Gateway") {
+  Component(gatewayAPIComponent, "Kong", $descr="Предоставляет API")
+}
+System_Boundary(ThingSystem, "Система Устроств") {
+  Container(Light, "Устройство освещения", "Предоставляет API устройста освещения")
+  Container(Heating, "Устройство обогрева", "Предоставляет API устройста обогрева")
+  Container(Viewing, "Устройство наблюдения", "Предоставляет API устройста наблюдения")
+}
+
+
+
+ContainerDb(dbUser, "Database User", "PostgreSQL", "База для сервиса User", $sprite="postgresql_server")
+ContainerDb(dbThing, "Database Thing", "PostgreSQL", "База для сервиса Устройств", $sprite="postgresql_server")
+ContainerDb(dbScript, "Database Script", "PostgreSQL", "База для сервиса Сценариев", $sprite="postgresql_server")
+ContainerDb(dbTelemetry, "Database Telemetry", "PostgreSQL", "База для сервиса Телеметрии", $sprite="postgresql_server")
+
+
+Rel(deviceGatewayThingComponent, Light, "Запрос данных и вызов API")
+Rel(deviceGatewayThingComponent, Heating, "Запрос данных и вызов API")
+Rel(deviceGatewayThingComponent, Viewing, "Запрос данных и вызов API")
+Rel(deviceGatewayThingComponent, kafkaComponent, "Публикует данные полученные от устройств")
+Rel(kafkaComponent, deviceGatewayThingComponent, "Отправляет сообщшения устройствам")
+
+Rel(managerThingComponent, managerStateThingComponent, "Работа с сотоянием")
+Rel(managerThingComponent, managerCommandThingComponent, "Работа с командами")
+Rel(kafkaComponent, managerThingComponent, "Получение событий")
+
+
+
+
+Rel(gatewayAPIComponent, managerThingComponent, "Обращается к API")
+Rel(gatewayAPIComponent, scriptThingConstructorComponent, "Обращается к API")
+Rel(gatewayAPIComponent, scriptThingExeComponent, "Обращается к API")
+Rel(gatewayAPIComponent, telemetryComponent, "Обращается к API")
+
+
+Rel(managerThingComponent, dbAccessThingComponent, "Обращение к данным")
+Rel(scriptThingConstructorComponent, dbAccessScriptComponent, "Обращение к данным")
+Rel(scriptThingExeComponent, dbAccessScriptComponent, "Обращение к данным")
+Rel(telemetryComponent, dbAccessTelemetryComponent, "Обращение к данным")
+
+Rel(dbAccessThingComponent, dbThing, "Запросы к БД")
+Rel(dbAccessScriptComponent, dbScript, "Запросы к БД")
+Rel(dbAccessTelemetryComponent, dbTelemetry, "Запросы к БД")
+
+
+Rel(gatewayAPIComponent, userContainer, "Обращается к API")
+Rel(userSettingsComponent, dbAccessComponent, "Обращение к данным по настройкам")
+Rel(userAuthComponent, dbAccessComponent, "Обращение к данным ")
+Rel(dbAccessComponent, dbUser, "Запросы к БД")
+
+Rel(managerThingComponent, kafkaComponent, "Подписка на события")
+Rel(scriptThingConstructorComponent, kafkaComponent, "Подписка на события")
+Rel(scriptThingExeComponent, kafkaComponent, "Подписка на события")
+Rel(telemetryComponent, kafkaComponent, "Подписка на события")
+
+Rel(user, webComponent, "Использует функционал умного дома")
+Rel(user, mobileComponent, "Использует функционал умного дома")
+
+Rel(clientApp, APIGateway, "Обращается к API")
+@enduml
+
+

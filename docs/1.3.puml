@@ -1,0 +1,29 @@
+@startuml
+entity Device {
+  * device_id : int
+  --
+  device_name : varchar
+  status : varchar
+  user_id : int
+  device_type_id : int
+}
+
+entity DeviceType {
+  * device_type_id : int
+  --
+  type_name : varchar
+  description : varchar
+}
+
+entity DeviceConfig {
+  * config_id : int
+  --
+  device_id : int
+  config_key : varchar
+  config_value : varchar
+}
+
+DeviceType ||--o{ Device : "is of type"
+Device ||--o{ DeviceConfig : "has configuration"
+@enduml
+

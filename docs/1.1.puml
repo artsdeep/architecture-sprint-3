@@ -1,0 +1,19 @@
+@startuml
+title Контекст Системы отопления
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "Пользователь", "Пользователь системы")
+Person(admin, "Администратор", "Администратор системы умного дома и устройств")
+System(SmartHomeSystem, "Система умный дом", "Система умный дом, устанаввливает и мониторит температуру дома")
+
+System_Ext(SensorSystem, "Система устройств", "Предоставляет API для устройства отопления")
+
+
+Rel(SmartHomeSystem, SensorSystem, "Запрос данных с устройств и вызов API")
+Rel(admin, SmartHomeSystem, "Управляем умным домом")
+Rel(user, SmartHomeSystem, "Использует функционал умного дома")
+
+@enduml

@@ -1,0 +1,64 @@
+{
+	"info": {
+		"_postman_id": "8ceabe93-3a62-45cd-9e64-af15bd2b5801",
+		"name": "SMART-HOME",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "8846247"
+	},
+	"item": [
+		{
+			"name": "test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:7070/api/telemetry/start/4"
+			},
+			"response": []
+		},
+		{
+			"name": "add Device",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"deviceName\": \"Умная камера\",\n        \"userId\": 103,\n        \"deviceTypeId\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:7070/api/devices/registerDevice"
+			},
+			"response": []
+		},
+		{
+			"name": "get Telemetry id 4",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:7070/api/telemetry/device/4"
+			},
+			"response": []
+		},
+		{
+			"name": "add Telemetry",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"deviceId\": 4,\n  \"metricName\": \"temperature\",\n  \"value\": 53.5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:7070/api/telemetry"
+			},
+			"response": []
+		}
+	]
+}

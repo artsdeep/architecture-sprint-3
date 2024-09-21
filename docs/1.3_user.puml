@@ -1,0 +1,56 @@
+@startuml
+entity User {
+  * user_id : int
+  --
+  username : varchar
+  email : varchar
+  password_hash : varchar
+  created_at : datetime
+  updated_at : datetime
+}
+
+entity Role {
+  * role_id : int
+  --
+  role_name : varchar
+  description : varchar
+}
+
+entity UserRole {
+  * user_role_id : int
+  --
+  user_id : int
+  role_id : int
+  assigned_at : datetime
+}
+
+entity Permission {
+  * permission_id : int
+  --
+  permission_name : varchar
+  description : varchar
+}
+
+entity RolePermission {
+  * role_permission_id : int
+  --
+  role_id : int
+  permission_id : int
+  granted_at : datetime
+}
+
+entity AuditLog {
+  * log_id : int
+  --
+  user_id : int
+  action : varchar
+  timestamp : datetime
+  details : text
+}
+
+User ||--o{ UserRole : "has roles assigned"
+Role ||--o{ UserRole : "is assigned to users"
+Role ||--o{ RolePermission : "has permissions"
+Permission ||--o{ RolePermission : "is assigned to roles"
+User ||--o{ AuditLog : "performs actions"
+@enduml

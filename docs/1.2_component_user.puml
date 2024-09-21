@@ -1,0 +1,24 @@
+@startuml
+title Диаграмма уровня компонентов Пользовательский сервис
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+
+Container_Boundary(userContainer, "Пользовательский сервис") {
+  Component(userSettingsComponent, "User Settings", $descr="Настройки для пользователя")
+  Component(userAuthComponent, "Auth", $descr="Реализация доступов пользователя")
+  Component(dbAccessComponent, "DB Access", $descr="Реализация взаимодействия с БД")
+}
+
+
+Rel(userSettingsComponent, dbAccessComponent, "Обращение к данным по настройкам")
+Rel(userAuthComponent, dbAccessComponent, "Обращение к данным ")
+
+
+
+
+@enduml
+
+

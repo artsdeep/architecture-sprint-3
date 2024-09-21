@@ -1,74 +1,303 @@
-# Базовая настройка
+# Описание
+## Архитектура As Is
 
-## Запуск minikube
+Диаграмма контектса
+![img_2.png](img_2.png)
+[C4](./docs/1.1.puml)
 
-[Инструкция по установке](https://minikube.sigs.k8s.io/docs/start/)
+## Домены
+Управление отоплением:
+    Пользователи могут удалённо включать/выключать отопление в своих домах.
+    Пользователи могут устанавливать желаемую температуру.
+    Система автоматически поддерживает заданную температуру, регулируя подачу тепла.
+Мониторинг температуры:
+    Система получает данные о температуре с датчиков, установленных в домах.
+    Пользователи могут просматривать текущую температуру в своих домах через веб-интерфейс.
 
-```bash
-minikube start
+## Техническое описание:
+Язык программирования: Java
+
+База данных: PostgreSQL
+
+Архитектура: Монолитная, все компоненты системы (обработка запросов, бизнес-логика, работа с данными) находятся в рамках одного приложения.
+
+Взаимодействие: Синхронное, запросы обрабатываются последовательно.
+
+Масштабируемость: Ограничена, так как монолит сложно масштабировать по частям.
+
+Развертывание: Требует остановки всего приложения.
+
+## Плюсы решения:
+
+Простота разработки и тестирования
+
+Цельность системы
+
+Единое окружение 
+
+Производительность
+
+Единственная база данный (упращает поддержку)
+
+## Минусы решения:
+
+Ограниченная масштабируемость
+
+Сложность в развертывании и обновлении
+
+
+## Архитектура To Be
+### Архитектура
+ Язык программирования: **Java**
+
+ База данных: **PostgreSQL**
+
+ Архитектура: **Микросервисная**
+
+ Взаимодействие: **Асинхронное** через шину(Kafka)
+ Масштабируемость: **Предусмотрено**, 
+ Развертывание: **Микросервисами**
+ #### Устройства обозначены как контейнеры Устройство освещения Устройство обогрева Устройство наблюдения 
+
+### Диаграмма уровня контейнеров
+![img.png](./docs/1.2_container_1-_____.png)
+[C4](./docs/1.2_container_1.puml)
+
+### Диаграмма уровня компанентов Пользовательский сервис
+![img.png](./docs/1.2_component_user-____.png)
+[C4](./docs/1.2_component_user.puml)
+
+### Диаграмма уровня компанентов Сценарии для устройств
+![img.png](./docs/1.2_component_script-_____.png)
+[C4](./docs/1.2_component_script.puml)
+
+### Диаграмма уровня компанентов Телемметрия
+![img.png](./docs/1.2_component_telemetry-___.png)
+[C4](./docs/1.2_component_telemetry.puml)
+
+### Диаграмма уровня компанентов Управление устройствами
+![img.png](./docs/1.2_component_manager-____.png)
+[C4](./docs/1.2_component_manager.puml)
+
+### Контейнеро-компонентная диаграмма
+![img.png](./docs/1.2_container-_____.png)
+
+
+## ER
+Database User [ER](./docs/1.3_user.puml)
+
+![img_1.png](img_1.png)
+
+Database Thing [ER](./docs/1.3.puml)
+
+![img_3.png](img_3.png)
+
+Database Script [ER](./docs/1.3_scr.puml)
+
+![img_4.png](img_4.png)
+
+Database Telemetry [ER](./docs/1.3_tel.puml)
+
+![img_5.png](img_5.png)
+
+# Описание взаимодействия
+[Описание API в формате AsyncAPI](./docs/asyncapi.yaml)
+
+# Управление устройствами и Телеметрия 1.0.0 documentation
+
+* Support: [Команда разработчиков](https://example.com)
+* Email support: [support@example.com](mailto:support@example.com)
+
+API для взаимодействия между сервисами "Управление устройствами" и "Телеметрия" в формате AsyncAPI.
+
+
+## Table of Contents
+
+* [Servers](#servers)
+    * [production](#production-server)
+* [Operations](#operations)
+    * [PUB device/registration](#pub-deviceregistration-operation)
+    * [SUB device/registration](#sub-deviceregistration-operation)
+    * [PUB telemetry/data](#pub-telemetrydata-operation)
+    * [SUB telemetry/data](#sub-telemetrydata-operation)
+
+## Servers
+
+### `production` Server
+
+* URL: `kafka.example.com:9092`
+* Protocol: `kafka`
+
+
+#### Security
+
+##### Security Requirement 1
+
+* security.protocol: PLAINTEXT
+
+
+
+
+
+
+
+## Operations
+
+### PUB `device/registration` Operation
+
+*Регистрация устройства*
+
+* Operation ID: `registerDevice`
+
+Канал для сообщений о регистрации устройства
+
+#### Message `<anonymous-message-1>`
+
+* Content type: [application/json](https://www.iana.org/assignments/media-types/application/json)
+
+##### Payload
+
+| Name | Type | Description | Value | Constraints | Notes |
+|---|---|---|---|---|---|
+| (root) | object | - | - | - | **additional properties are allowed** |
+| device_id | string | Уникальный идентификатор устройства | - | - | - |
+| device_type | string | Тип устройства | - | - | - |
+| owner_id | string | Идентификатор владельца устройства | - | - | - |
+
+> Examples of payload _(generated)_
+
+```json
+{
+  "device_id": "string",
+  "device_type": "string",
+  "owner_id": "string"
+}
 ```
 
 
-## Добавление токена авторизации GitHub
 
-[Получение токена](https://github.com/settings/tokens/new)
+### SUB `device/registration` Operation
 
-```bash
-kubectl create secret docker-registry ghcr --docker-server=https://ghcr.io --docker-username=<github_username> --docker-password=<github_token> -n default
+*Получение сообщений о регистрации устройства*
+
+* Operation ID: `receiveDeviceRegistration`
+
+Канал для сообщений о регистрации устройства
+
+#### Message `<anonymous-message-2>`
+
+* Content type: [application/json](https://www.iana.org/assignments/media-types/application/json)
+
+##### Payload
+
+| Name | Type | Description | Value | Constraints | Notes |
+|---|---|---|---|---|---|
+| (root) | object | - | - | - | **additional properties are allowed** |
+| status | string | Статус регистрации | - | - | - |
+| device_id | string | Уникальный идентификатор устройства | - | - | - |
+| message | string | Описание результата регистрации | - | - | - |
+
+> Examples of payload _(generated)_
+
+```json
+{
+  "status": "string",
+  "device_id": "string",
+  "message": "string"
+}
 ```
 
 
-## Установка API GW kusk
 
-[Install Kusk CLI](https://docs.kusk.io/getting-started/install-kusk-cli)
+### PUB `telemetry/data` Operation
 
-```bash
-kusk cluster install
-```
+*Отправка телеметрических данных*
 
+* Operation ID: `sendTelemetryData`
 
-## Настройка terraform
+Канал для передачи телеметрических данных
 
-[Установите Terraform](https://yandex.cloud/ru/docs/tutorials/infrastructure-management/terraform-quickstart#install-terraform)
+#### Message `<anonymous-message-3>`
 
+* Content type: [application/json](https://www.iana.org/assignments/media-types/application/json)
 
-Создайте файл ~/.terraformrc
+##### Payload
 
-```hcl
-provider_installation {
-  network_mirror {
-    url = "https://terraform-mirror.yandexcloud.net/"
-    include = ["registry.terraform.io/*/*"]
-  }
-  direct {
-    exclude = ["registry.terraform.io/*/*"]
+| Name | Type | Description | Value | Constraints | Notes |
+|---|---|---|---|---|---|
+| (root) | object | - | - | - | **additional properties are allowed** |
+| device_id | string | Уникальный идентификатор устройства | - | - | - |
+| timestamp | string | Временная метка данных | - | format (`date-time`) | - |
+| data | object | Телеметрические данные | - | - | **additional properties are allowed** |
+| data.temperature | number | Температура устройства | - | - | - |
+| data.humidity | number | Влажность устройства | - | - | - |
+
+> Examples of payload _(generated)_
+
+```json
+{
+  "device_id": "string",
+  "timestamp": "2019-08-24T14:15:22Z",
+  "data": {
+    "temperature": 0,
+    "humidity": 0
   }
 }
 ```
 
-## Применяем terraform конфигурацию 
 
-```bash
-cd terraform
-terraform apply
+
+### SUB `telemetry/data` Operation
+
+*Получение телеметрических данных*
+
+* Operation ID: `receiveTelemetryData`
+
+Канал для передачи телеметрических данных
+
+#### Message `<anonymous-message-4>`
+
+* Content type: [application/json](https://www.iana.org/assignments/media-types/application/json)
+
+##### Payload
+
+| Name | Type | Description | Value | Constraints | Notes |
+|---|---|---|---|---|---|
+| (root) | object | - | - | - | **additional properties are allowed** |
+| device_id | string | Уникальный идентификатор устройства | - | - | - |
+| timestamp | string | Временная метка данных | - | format (`date-time`) | - |
+| data | object | Телеметрические данные | - | - | **additional properties are allowed** |
+| data.temperature | number | Температура устройства | - | - | - |
+| data.humidity | number | Влажность устройства | - | - | - |
+
+> Examples of payload _(generated)_
+
+```json
+{
+  "device_id": "string",
+  "timestamp": "2019-08-24T14:15:22Z",
+  "data": {
+    "temperature": 0,
+    "humidity": 0
+  }
+}
 ```
 
-## Настройка API GW
 
+# Базовая настройка
+
+
+## Запуск 
 ```bash
-kusk deploy -i api.yaml
+cd deploy
+docker-compose up 
 ```
+Коллекция запросов postman
+[postman_collection](./docs/SMART-HOME.postman_collection.json)
 
-## Проверяем работоспособность
+После выполнения запроса add Device можно использовать полученный идентификатор в запросе get Telemetry id 4, чтобы проверить взаимодействие между микросервисами через Kafka.
+по адресу http://localhost:8090/ - доступен ui Kafka
 
-```bash
-kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8080:80
-curl localhost:8080/hello
-```
-
-
-## Delete minikube
-
-```bash
-minikube delete
-```
+исходя из задания созданы репозитории для микросервисов
+https://github.com/artsdeep/smart-home-telemetry
+https://github.com/artsdeep/smart-home-thing-manager
